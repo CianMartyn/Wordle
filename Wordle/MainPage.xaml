@@ -1,1 +1,32 @@
-﻿
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wordle.MainPage"
+             BackgroundColor="Transparent">
+
+    <VerticalStackLayout Spacing="20" Padding="20" HorizontalOptions="Center" VerticalOptions="Start">
+
+        <!-- Grid for displaying letters -->
+        <Grid x:Name="lettersGrid" HorizontalOptions="Center">
+            <Grid.RowDefinitions>
+                <!-- Add as many RowDefinitions as needed for the number of attempts -->
+                <RowDefinition Height="Auto" />
+                <!-- Repeat RowDefinition for each attempt -->
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <!-- One ColumnDefinition for each letter in the word -->
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <!-- Input for user's guess -->
+        <Entry x:Name="userInput" Placeholder="Enter your guess" MaxLength="5" HorizontalOptions="Fill" />
+
+        <!-- Button to submit the guess -->
+        <Button Text="Submit Guess" Clicked="OnGuess" />
+
+    </VerticalStackLayout>
+</ContentPage>      
