@@ -1,18 +1,38 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Wordle.MainPage"
-             BackgroundColor="Transparent">
+             BackgroundColor="Black">
 
     <VerticalStackLayout Spacing="20" Padding="20" HorizontalOptions="Center" VerticalOptions="Start">
 
-        <!-- Grid for the guessing game -->
+        <!-- Title Label -->
+        <Label Text="Wordle"
+               FontSize="36"
+               FontAttributes="Bold"
+               TextColor="White"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               Margin="0,0,0,20" />
+
+        <!-- Reset Button -->
+        <Button x:Name="ResetButton"
+                Text="Reset Game"
+                Clicked="ResetButton_Clicked"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                Margin="10"
+                BackgroundColor="#0078D7"
+                TextColor="White"/>
+
+        <!-- Grid  -->
+
         <Grid x:Name="guessGrid" 
               HorizontalOptions="Center" 
               VerticalOptions="Start"
               RowSpacing="10"
               ColumnSpacing="10">
             <Grid.RowDefinitions>
-                <!-- Define rows with increased height -->
+                <!-- Define rows -->
                 <RowDefinition Height="60" />
                 <RowDefinition Height="60" />
                 <RowDefinition Height="60" />
@@ -21,14 +41,13 @@
                 <RowDefinition Height="60" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <!-- Define columns with increased width -->
+                <!-- Define columns  -->
                 <ColumnDefinition Width="60" />
                 <ColumnDefinition Width="60" />
                 <ColumnDefinition Width="60" />
                 <ColumnDefinition Width="60" />
                 <ColumnDefinition Width="60" />
             </Grid.ColumnDefinitions>
-            <!-- Frames and Labels will be added dynamically in code-behind -->
         </Grid>
 
         <!-- Input for user's guess -->

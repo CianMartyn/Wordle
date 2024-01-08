@@ -48,19 +48,21 @@ public partial class MainPage : ContentPage
 
     public void CheckGuessAndUpdateUI(string userGuess)
     {
+        userGuess = userGuess.ToUpper(); // Ensure user guess is in the same case as the word
+
         for (int i = 0; i < userGuess.Length; i++)
         {
-            Color backgroundColor = Colors.Transparent; // Default background color
+            var backgroundColor = Colors.Transparent; // Default background color
 
             if (i < currentWord.Length)
             {
                 if (userGuess[i] == currentWord[i])
                 {
-                    backgroundColor = Colors.Green; // Letter is correct and in the correct position
+                    backgroundColor = Colors.Green; // Correct letter and in the correct position
                 }
                 else if (currentWord.Contains(userGuess[i]))
                 {
-                    backgroundColor = Colors.Yellow; // Letter is correct but in the wrong position
+                    backgroundColor = Colors.Yellow; // Letter is in the word but in the wrong position
                 }
             }
 
@@ -68,8 +70,9 @@ public partial class MainPage : ContentPage
             if (labelIndex < guessGrid.Children.Count)
             {
                 var frame = guessGrid.Children[labelIndex] as Frame;
-                if (frame != null)
+                if (frame?.Content is Label label)
                 {
+                    label.Text = userGuess[i].ToString();
                     frame.BackgroundColor = backgroundColor; // Update the background color of the frame
                 }
             }
@@ -94,7 +97,10 @@ public partial class MainPage : ContentPage
     }
     private void ShowResultScreen(bool isWin)
     {
-        string message = isWin ? "Congratulations! You've guessed the word!" : "Game Over! You've run out of attempts!";
+        string message = isWin
+            ? "Congratulations! You've guessed the word!"
+            : $"You've run out of attempts! The word was {currentWord}.";  // Corrected string interpolation
+
         string title = isWin ? "Congratulations" : "Game Over";
 
         // Using a simple display alert to show the result
@@ -103,6 +109,11 @@ public partial class MainPage : ContentPage
             await DisplayAlert(title, message, "OK");
             ResetGame(); // Reset the game for a new round
         });
+    }
+
+    private void ResetButton_Clicked(object sender, EventArgs e)
+    {
+        ResetGame();
     }
 
     private void CreateGuessGrid()
@@ -121,13 +132,13 @@ public partial class MainPage : ContentPage
                 };
                 // Ensure the Frame does not exceed the cell size
                 letterFrame.WidthRequest = 50;
-                letterFrame.HeightRequest = 50; 
+                letterFrame.HeightRequest = 50;
 
 
                 var letterLabel = new Label
                 {
                     Text = "",
-                    FontSize = 24, 
+                    FontSize = 24,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
                 };
@@ -165,26 +176,49 @@ public partial class MainPage : ContentPage
 
     private void ResetGame()
     {
-        foreach (var child in guessGrid.Children)
+        // Show an alert with the chosen word
+        Device.BeginInvokeOnMainThread(async () =>
         {
-            if (child is Label label)
+            await DisplayAlert("Game Reset", $"The word was: {currentWord}", "OK");
+
+            // Reset each frame in the grid
+            foreach (var child in guessGrid.Children)
             {
-                label.Text = "";
+                if (child is Frame frame && frame.Content is Label label)
+                {
+                    label.Text = ""; // Clear the text
+                    frame.BackgroundColor = Colors.Transparent; // Reset background color
+                }
             }
-        }
-        currentAttempt = 0;
-        PickWord();
+
+            currentAttempt = 0;
+            PickWord();
+
+            // Clear the user input text
+            userInput.Text = string.Empty;
+        });
     }
 
     private void OnGuess(object sender, EventArgs e)
     {
-        var userGuess = userInput.Text.ToUpper();
+        var userGuess = userInput.Text.ToUpper().Trim(); // Convert to uppercase and trim
         if (userGuess.Length != wordLength) return;
 
+        //if (!words.Contains(userGuess))
+        //{
+        //    Device.BeginInvokeOnMainThread(async () =>
+        //    {
+        //        await DisplayAlert("Invalid Word", "The guessed word is not in the list.", "OK");
+        //        userInput.Text = "";
+        //    });
+        //    return;
+        //}
+
         Device.BeginInvokeOnMainThread(() =>
-        {   
+        {
             CheckGuessAndUpdateUI(userGuess);
             userInput.Text = ""; // Clear the input field
         });
     }
 }
+
