@@ -5,21 +5,30 @@
 
     <VerticalStackLayout Spacing="20" Padding="20" HorizontalOptions="Center" VerticalOptions="Start">
 
-        <!-- Grid for displaying letters -->
-        <Grid x:Name="lettersGrid" HorizontalOptions="Center">
+        <!-- Grid for the guessing game -->
+        <Grid x:Name="guessGrid" 
+              HorizontalOptions="Center" 
+              VerticalOptions="Start"
+              RowSpacing="10"
+              ColumnSpacing="10">
             <Grid.RowDefinitions>
-                <!-- Add as many RowDefinitions as needed for the number of attempts -->
-                <RowDefinition Height="Auto" />
-                <!-- Repeat RowDefinition for each attempt -->
+                <!-- Define rows with increased height -->
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <!-- One ColumnDefinition for each letter in the word -->
-                <ColumnDefinition Width="40" />
-                <ColumnDefinition Width="40" />
-                <ColumnDefinition Width="40" />
-                <ColumnDefinition Width="40" />
-                <ColumnDefinition Width="40" />
+                <!-- Define columns with increased width -->
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="60" />
             </Grid.ColumnDefinitions>
+            <!-- Frames and Labels will be added dynamically in code-behind -->
         </Grid>
 
         <!-- Input for user's guess -->
@@ -29,4 +38,4 @@
         <Button Text="Submit Guess" Clicked="OnGuess" />
 
     </VerticalStackLayout>
-</ContentPage>      
+</ContentPage>
