@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Maui.Graphics;
 using System.Diagnostics;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Wordle;
 
@@ -17,22 +19,41 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
-        LoadWords();
+        Task.Run(async () => await LoadWords()).Wait();
         PickWord();
         CreateGuessGrid();
     }
 
-    private void LoadWords()
+    private async Task LoadWords()
     {
+        string localPath = Path.Combine(FileSystem.AppDataDirectory, "words.txt");
+        string url = "https://raw.githubusercontent.com/DonH-ITS/jsonfiles/main/words.txt";
+
+        if (!File.Exists(localPath))
+        {
+            // Download the file and save it locally
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var wordsData = await httpClient.GetStringAsync(url);
+                    File.WriteAllText(localPath, wordsData);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error downloading file: {ex.Message}");
+                    return;
+                }
+            }
+        }
+
         try
         {
-            var file = "C:\\Users\\35387\\Downloads\\OneDrive - Atlantic TU\\Year 3\\Wordle\\words.txt";
-            var fileContents = File.ReadAllLines(file);
+            var fileContents = File.ReadAllLines(localPath);
             words = new List<string>(fileContents);
         }
         catch (Exception ex)
         {
-            // Handle the error
             Debug.WriteLine($"Error reading file: {ex.Message}");
         }
     }
@@ -99,7 +120,7 @@ public partial class MainPage : ContentPage
     {
         string message = isWin
             ? "Congratulations! You've guessed the word!"
-            : $"You've run out of attempts! The word was {currentWord}.";  // Corrected string interpolation
+            : $"You've run out of attempts! The word was {currentWord}."; 
 
         string title = isWin ? "Congratulations" : "Game Over";
 
@@ -203,7 +224,7 @@ public partial class MainPage : ContentPage
     {
         var userGuess = userInput.Text.ToUpper().Trim(); // Convert to uppercase and trim
         if (userGuess.Length != wordLength) return;
-
+        // displays an error to the user if the word they entered is not in the list
         //if (!words.Contains(userGuess))
         //{
         //    Device.BeginInvokeOnMainThread(async () =>

@@ -19,8 +19,8 @@
                 Text="Reset Game"
                 Clicked="ResetButton_Clicked"
                 HorizontalOptions="Center"
-                VerticalOptions="End"
-                Margin="10"
+                VerticalOptions="Center"
+                Margin="5"
                 BackgroundColor="#0078D7"
                 TextColor="White"/>
 
@@ -28,9 +28,7 @@
 
         <Grid x:Name="guessGrid" 
               HorizontalOptions="Center" 
-              VerticalOptions="Start"
-              RowSpacing="10"
-              ColumnSpacing="10">
+              VerticalOptions="Start">
             <Grid.RowDefinitions>
                 <!-- Define rows -->
                 <RowDefinition Height="60" />
